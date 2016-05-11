@@ -22,6 +22,21 @@ app.controller('Authentication', ['$scope', '$rootScope', '$location', '$state',
     };
 	
 	$scope.facebookLogin = function () {
+		console.log("invoking adapter proc");
+		   WL.Client.invokeProcedure({
+	    		adapter : 'myAdapter',
+	    		procedure : 'getGmapLatLng'
+	    	}, {
+	    		onSuccess : function(result) {
+	    			console.log("success adapter proc");
+	    			//Do something interesting with resulting JSON
+	    			alert(result.invocationResult.interestingData);
+	    		},
+	    		onFailure: function(result){
+	    			WL.SimpleDialog.show("Error","The service is temporarily not available. Please try again later.",[{text: "OK"}]);
+	    		}
+	    	});
+	   
 		 OpenFB.login('email').then(
                 function () {                    
 					OpenFB.get('/me').success(function (user) {
@@ -66,6 +81,19 @@ app.controller('Authentication', ['$scope', '$rootScope', '$location', '$state',
 		};
     self.signIn = function () {
       console.log('Sign In...');
+
+      WL.Client.invokeProcedure({
+    		adapter : 'myAdapter',
+    		procedure : 'getGmapLatLng'
+    	}, {
+    		onSuccess : function(result) {
+    			//Do something interesting with resulting JSON
+    			alert(result.invocationResult.interestingData);
+    		},
+    		onFailure: function(result){
+    			WL.SimpleDialog.show("Error","The service is temporarily not available. Please try again later.",[{text: "OK"}]);
+    		}
+    	});
       var user = {
         "email": self.login.email,
         "passWord": self.login.password
